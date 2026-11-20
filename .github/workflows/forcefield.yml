@@ -1,0 +1,29 @@
+name: ForcefieldAi9
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - forcefield.cpp
+      - scripts/forcefield-check.sh
+      - .github/workflows/forcefield.yml
+  pull_request:
+    branches: [main, master]
+    paths:
+      - forcefield.cpp
+      - scripts/forcefield-check.sh
+      - .github/workflows/forcefield.yml
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: g++ -std=c++17 -Wall -Wextra -o forcefield_test forcefield.cpp
+      - name: Run simulation smoke test
+        run: |
+          ./forcefield_test > run.log
+          grep -q "N-DIMENSIONAL FORCE FIELD SYSTEM v2.0" run.log
+          grep -q "Simulation complete. Final time: 1.00" run.log
+          grep -q "Particles: 3" run.log
