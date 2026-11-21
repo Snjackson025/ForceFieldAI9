@@ -13,28 +13,22 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\VectorND.h">
-      <UniqueIdentifier>{afd0ddd0-692c-462f-8f51-81cddb1f5ea3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ForceField.h">
-      <UniqueIdentifier>{05c704bb-f1c8-4ce4-a9f9-2f6a0b926beb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ForceFieldAI.h">
-      <UniqueIdentifier>{1f6d1d1e-a333-4bbe-a672-795e1fab6216}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\main.cpp">
-      <UniqueIdentifier>{0c8e7299-c79a-46b8-99b2-fee49ff60f73}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ForceFieldAI9.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ForceField.h" />
-    <Text Include="VectorND.h" />
-    <Text Include="ForceFieldAI.h" />
-    <Text Include="main.cpp" />
+    <ClInclude Include="ForceField.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ForceFieldAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorND.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <Text Include="ForceFieldAI9.cpp" />
   </ItemGroup>
 </Project>
