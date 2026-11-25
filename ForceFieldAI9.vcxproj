@@ -123,13 +123,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ForceFieldAI9.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ForceField.h" />
-    <Text Include="ForceFieldAI.h" />
-    <Text Include="main.cpp" />
-    <Text Include="VectorND.h" />
+    <ClInclude Include="ForceField.h" />
+    <ClInclude Include="ForceFieldAI.h" />
+    <ClInclude Include="VectorND.h" />
+    <Text Include="ForceFieldAI9.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

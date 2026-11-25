@@ -1,58 +1,75 @@
 name: Build and Test ForceFieldAI9
 
 on:
+  # Runs every day at 06:00 UTC (01:00 EST).
+  schedule:
+    - cron: '0 6 * * *'
   push:
     branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: windows-latest
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
-    
+
     - name: Build project (Debug x64)
-      run: |
-        msbuild ForceFieldAI9.sln /p:Configuration=Debug /p:Platform=x64 2>&1 || echo "Build completed with warnings or errors"
-    
+      run: msbuild ForceFieldAI9.sln /p:Configuration=Debug /p:Platform=x64
+
     - name: Build project (Release x64)
-      run: |
-        msbuild ForceFieldAI9.sln /p:Configuration=Release /p:Platform=x64 2>&1 || echo "Build completed with warnings or errors"
-    
+      run: msbuild ForceFieldAI9.sln /p:Configuration=Release /p:Platform=x64
+
     - name: Upload build artifacts (Debug)
-      if: always()
+      if: success()
       uses: actions/upload-artifact@v4
       with:
         name: build-Debug-x64
         path: x64/Debug/
-        continue-on-error: true
-    
+
     - name: Upload build artifacts (Release)
-      if: always()
+      if: success()
       uses: actions/upload-artifact@v4
       with:
         name: build-Release-x64
         path: x64/Release/
-        continue-on-error: true
 
   test:
     runs-on: windows-latest
     needs: build
-    
+
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v2
-    
+
     - name: Build in Debug mode
       run: msbuild ForceFieldAI9.sln /p:Configuration=Debug /p:Platform=x64
-    
-    - name: Report test results
-      if: always()
-      run: echo "Build and test workflow completed"
+
+    - name: Run application and verify its output
+      run: |
+        $exe = "x64/Debug/ForceFieldAI9.exe"
+        if (-not (Test-Path $exe)) {
+          Write-Error "Executable not found at $exe"
+          Get-ChildItem -Recurse x64/ | Select-Object FullName
+          exit 1
+        }
+        $output = & ./$exe | Tee-Object -FilePath test-output.txt
+        if ($LASTEXITCODE -ne 0) {
+          Write-Error "ForceFieldAI9.exe exited with code $LASTEXITCODE"
+          exit 1
+        }
+        if (-not ($output -match "Net Force:")) {
+          Write-Error "Expected 'Net Force:' in output"
+          exit 1
+        }
+        Write-Host "Test passed: ForceFieldAI9.exe ran, exited 0, and printed the net force"
